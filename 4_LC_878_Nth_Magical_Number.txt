@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long MOD = 1e9 + 7;
+
+long long gcd(long long a, long long b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+int main() {
+    long long n, a, b;
+    cin >> n >> a >> b;
+    long long lcm = a / gcd(a, b) * b;
+    long long lo = 1, hi = (long long)n * min(a, b);
+    while (lo < hi) {
+        long long mid = (lo + hi) / 2;
+        long long cnt = mid / a + mid / b - mid / lcm;
+        if (cnt < n) lo = mid + 1;
+        else hi = mid;
+    }
+    cout << lo % MOD << "\n";
+    return 0;
+}

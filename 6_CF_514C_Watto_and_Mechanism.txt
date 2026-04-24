@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const long long MOD1 = 1e9 + 7;
+const long long MOD2 = 1e9 + 9;
+const long long BASE1 = 31;
+const long long BASE2 = 37;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    set<pair<long long, long long>> hashes;
+    for (int i = 0; i < n; i++) {
+        string s;
+        cin >> s;
+        long long h1 = 0, h2 = 0, p1 = 1, p2 = 1;
+        for (char c : s) {
+            int v = c - 'a' + 1;
+            h1 = (h1 + v * p1) % MOD1;
+            h2 = (h2 + v * p2) % MOD2;
+            p1 = p1 * BASE1 % MOD1;
+            p2 = p2 * BASE2 % MOD2;
+        }
+        hashes.insert({h1, h2});
+    }
+    for (int i = 0; i < m; i++) {
+        string s;
+        cin >> s;
+        bool found = false;
+        for (int j = 0; j < (int)s.size() && !found; j++) {
+            int orig = s[j] - 'a';
+            for (int delta = -1; delta <= 1; delta += 2) {
+                int nv = orig + delta;
+                if (nv < 0 || nv > 25) continue;
+                s[j] = 'a' + nv;
+                long long h1 = 0, h2 = 0, p1 = 1, p2 = 1;
+                for (char c : s) {
+                    int v = c - 'a' + 1;
+                    h1 = (h1 + v * p1) % MOD1;
+                    h2 = (h2 + v * p2) % MOD2;
+                    p1 = p1 * BASE1 % MOD1;
+                    p2 = p2 * BASE2 % MOD2;
+                }
+                if (hashes.count({h1, h2})) { found = true; break; }
+                s[j] = 'a' + orig;
+            }
+            s[j] = 'a' + orig;
+        }
+        cout << (found ? "YES" : "NO") << "\n";
+    }
+    return 0;
+}

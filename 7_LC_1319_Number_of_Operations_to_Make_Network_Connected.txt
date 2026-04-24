@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> parent, rnk;
+
+int find(int x) {
+    if (parent[x] != x) parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+bool unite(int a, int b) {
+    a = find(a); b = find(b);
+    if (a == b) return false;
+    if (rnk[a] < rnk[b]) swap(a, b);
+    parent[b] = a;
+    if (rnk[a] == rnk[b]) rnk[a]++;
+    return true;
+}
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    parent.resize(n); rnk.resize(n, 0);
+    for (int i = 0; i < n; i++) parent[i] = i;
+    int extra = 0;
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        if (!unite(u, v)) extra++;
+    }
+    int components = 0;
+    for (int i = 0; i < n; i++) if (find(i) == i) components++;
+    int needed = components - 1;
+    cout << (extra >= needed ? needed : -1) << "\n";
+    return 0;
+}

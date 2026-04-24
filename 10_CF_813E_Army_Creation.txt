@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> c(n + 1);
+    vector<vector<int>> pos(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> c[i];
+        pos[c[i]].push_back(i);
+    }
+    while (q--) {
+        int type;
+        cin >> type;
+        if (type == 1) {
+            int i, ci;
+            cin >> i >> ci;
+            auto& old = pos[c[i]];
+            old.erase(lower_bound(old.begin(), old.end(), i));
+            c[i] = ci;
+            auto& nw = pos[c[i]];
+            nw.insert(lower_bound(nw.begin(), nw.end(), i), i);
+        } else {
+            int l, r, k;
+            cin >> l >> r >> k;
+            auto& v = pos[k];
+            auto it = lower_bound(v.begin(), v.end(), l);
+            int idx = (int)(it - v.begin());
+            int cnt = (int)(upper_bound(v.begin(), v.end(), r) - it);
+            if (cnt <= 0) { cout << -1 << "\n"; continue; }
+            int need = (cnt + 1) / 2;
+            cout << v[idx + need - 1] << "\n";
+        }
+    }
+    return 0;
+}

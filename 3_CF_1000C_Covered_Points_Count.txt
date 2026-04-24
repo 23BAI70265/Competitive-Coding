@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<long long, int>> events;
+    for (int i = 0; i < n; i++) {
+        long long l, r;
+        cin >> l >> r;
+        events.push_back({l, 1});
+        events.push_back({r + 1, -1});
+    }
+    sort(events.begin(), events.end());
+    vector<long long> ans(n + 1, 0);
+    long long prev = 0;
+    int cnt = 0;
+    for (int i = 0; i < (int)events.size(); ) {
+        long long cur = events[i].first;
+        if (cnt > 0) ans[cnt] += cur - prev;
+        while (i < (int)events.size() && events[i].first == cur) {
+            cnt += events[i].second;
+            i++;
+        }
+        prev = cur;
+    }
+    for (int i = 1; i <= n; i++) {
+        cout << ans[i] << " \n"[i == n];
+    }
+    return 0;
+}

@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    int m;
+    cin >> m;
+    vector<long long> batteries(m);
+    for (int i = 0; i < m; i++) cin >> batteries[i];
+    sort(batteries.begin(), batteries.end());
+    long long total = 0;
+    for (long long b : batteries) total += b;
+    long long lo = 0, hi = total / n;
+    while (lo < hi) {
+        long long mid = (lo + hi + 1) / 2;
+        long long extra = 0;
+        for (long long b : batteries) extra += min(b, mid);
+        if (extra >= (long long)n * mid) lo = mid;
+        else hi = mid - 1;
+    }
+    cout << lo << "\n";
+    return 0;
+}
